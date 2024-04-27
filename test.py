@@ -65,9 +65,9 @@ def test_model(loaded_model) -> int:
 def display_prediction(prediction) -> None:
     match prediction:
         case 0:
-            print('Bank Note is Genuine') 
+            print('Prediction: Bank Note is Genuine') 
         case 1:  
-            print('Bank Note is possibly a Counterfeit')
+            print('Prediction: Bank Note is Fake')
         case _:
             print('Unexpected Output occured')
 
