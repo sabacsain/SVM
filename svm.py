@@ -50,8 +50,8 @@ def load_dataset(filepath):
 def create_model(directory_path, dataset_path, df):
     try:
         # Split the data into features and labels
-        X_train = df.drop(df.columns[-1], axis=1)
-        y_train = df[df.columns[-1]]
+        X_train = df.drop('Label', axis=1)
+        y_train = df['Label']
 
         # Splitting the dataset into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.4)
@@ -60,8 +60,7 @@ def create_model(directory_path, dataset_path, df):
         svm_classifier = SVC(kernel='linear', C=1.0, random_state=42)
 
         # Train the classifier
-        svm_classifier.feature_names_in_ = ['Variance', 'Skewness', 'Curtosis', 'Entropy']
-        svm_classifier.fit(X_train.values, y_train)
+        svm_classifier.fit(X_train, y_train)
 
         # Predict the labels of the test data
         y_pred = svm_classifier.predict(X_test)
