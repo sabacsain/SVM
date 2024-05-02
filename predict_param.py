@@ -11,7 +11,7 @@ def get_filepath() -> Path:
         directory_path = Path(current_path)
 
         # Concatenate the directory path and dataset location
-        dataset_path = directory_path / 'svm_model.pkl'
+        dataset_path = directory_path / 'svm_model_param.pkl'
 
     # Check for errors
     except Exception as e:
@@ -25,7 +25,7 @@ def get_filepath() -> Path:
     
     # Successful extraction of filepath
     else:
-        print('Filepaths extracted successfully')
+        print('Filepath extracted successfully')
         return dataset_path
 
 
@@ -38,7 +38,7 @@ def load_model(filepath) -> object:
         print('An error occured at load_model()')
         print('Error: ', e)
 
-        # Print the traceback information
+        # Print traceback information
         traceback.print_exc()
 
         return None
@@ -73,24 +73,29 @@ def display_prediction(prediction) -> None:
 
     
 if __name__ == "__main__":
+
+    # Get filepath of the model
     filepath = get_filepath()
 
     # Exit if there is an error getting the filepath
     if filepath is None:
         exit(1)
 
+    # Load the model
     model = load_model(filepath)
 
     # Exit if there is an error loading the model
     if model is None:
         exit(1)
 
+    # Predict using SVM
     prediction = test_model(model)
 
     # Exit if there is an error predicting the model
     if prediction is None:
         exit(1)
 
+    # Display the result
     display_prediction(prediction)
 
 

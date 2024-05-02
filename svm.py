@@ -1,16 +1,10 @@
 from pathlib import Path
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score
-# from ucimlrepo import fetch_ucirepo 
-  
+from sklearn.metrics import classification_report, confusion_matrix 
+
 import os, pickle, traceback
 import pandas as pd
-import numpy as np
-
-
-
 
 
 def get_filepath() -> Path:
@@ -53,21 +47,6 @@ def load_dataset(filepath):
         return df
 
 
-# def fetch_dataset() -> bool:
-#     try:
-#         # fetch dataset 
-#         dataset = fetch_ucirepo(id=267) 
-#         print(type(dataset))
-
-#     except Exception as e:
-#         print('An error occured', e)
-#         return None
-
-#     else:
-#         print('Data fetched successfully')
-#         return dataset
-    
-
 def create_model(directory_path, dataset_path, df):
     try:
         # Split the data into features and labels
@@ -77,15 +56,11 @@ def create_model(directory_path, dataset_path, df):
         # Splitting the dataset into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.4)
 
-        # # Convert text data into numerical features using CountVectorizer
-        # vectorizer = CountVectorizer()
-        # X_train_vectorized = vectorizer.fit_transform(X_train.apply(lambda x: ' '.join(x), axis=1))
-        # X_test_vectorized = vectorizer.transform(X_test.apply(lambda x: ' '.join(x), axis=1))
-
         # Create SVM classifier
         svm_classifier = SVC(kernel='linear', C=1.0, random_state=42)
 
         # Train the classifier
+        svm_classifier.feature_names_in_ = ['Variance', 'Skewness', 'Curtosis', 'Entropy']
         svm_classifier.fit(X_train.values, y_train)
 
         # Predict the labels of the test data
@@ -97,9 +72,8 @@ def create_model(directory_path, dataset_path, df):
             pickle.dump(svm_classifier, model_file)
         print('SVM Model created successfully')
 
-        # Calculate the accuracy of the classifier
-        accuracy = accuracy_score(y_test, y_pred)
-        print("Accuracy:", accuracy)
+        # Display Performance Matrix
+        print(classification_report(y_test, y_pred)) 
 
     except Exception as e:
         print('An error occured: ', e)
@@ -112,8 +86,9 @@ def create_model(directory_path, dataset_path, df):
     return 0
 
 
-
+# Main Driver
 if __name__ == "__main__":
+    # Get filepath
     filepath = get_filepath()
 
     # Exit if there is an error getting the file
