@@ -16,7 +16,7 @@ def get_filepath() -> Path:
         directory_path = Path(current_path)
 
         # Concatenate the directory path and dataset location
-        dataset_path = directory_path / 'dataset.txt'
+        dataset_path = directory_path / 'dataset.csv'
 
     # Check for errors
     except Exception as e:
@@ -25,14 +25,14 @@ def get_filepath() -> Path:
     
     # Successful extraction of filepath
     else:
-        print('Filepaths extracted successfully')
+        ('Filepath Extraction: Success')
         return {
             'directory_path'    :directory_path,
             'dataset_path'      :dataset_path        
         }
 
 
-def load_dataset(filepath):
+def load_dataset(filepath) -> object:
     try:
         df = pd.read_csv(filepath)
 
@@ -43,15 +43,15 @@ def load_dataset(filepath):
 
     # Successful reading of dataset
     else:
-        print("Dataset loaded successfully")
+        print("Load Dataset: Success")
         return df
 
 
-def create_model(directory_path, dataset_path, df):
+def create_model(directory_path, df) -> object:
     try:
         # Split the data into features and labels
-        X_train = df.drop(df.columns[-1], axis=1)
-        y_train = df[df.columns[-1]]
+        X_train = df.drop('Label', axis=1)
+        y_train = df['Label']
 
         # Splitting the dataset into training and testing sets
         X_train, X_test, y_train, y_test = train_test_split(X_train, y_train, test_size=0.4)
@@ -65,13 +65,13 @@ def create_model(directory_path, dataset_path, df):
         svm_classifier = GridSearchCV(SVC(), param_grid, refit = True, verbose = 3) 
 
         # Train the classifier
-        svm_classifier.fit(X_train.values, y_train)
+        svm_classifier.fit(X_train, y_train)
 
         # Predict the labels of the test data
         y_pred = svm_classifier.predict(X_test)
 
         # Save the model to a file using pickle
-        save_path =  directory_path / 'svm_model_param.pkl'
+        save_path =  directory_path / 'svm_model.pkl'
         with open(save_path, 'wb') as model_file:
             pickle.dump(svm_classifier, model_file)
         print('SVM Model created successfully')
@@ -92,6 +92,7 @@ def create_model(directory_path, dataset_path, df):
 
 # Main Driver
 if __name__ == "__main__":
+
     # Get filepath
     filepath = get_filepath()
 
@@ -99,13 +100,15 @@ if __name__ == "__main__":
     if filepath is None:
         exit(1)
 
+    # Load dataset
     df = load_dataset(filepath['dataset_path'])
 
-    # Exit if there is an error reading the data
+    # Exit if there is an error reading the dataset
     if df is None:
         exit(1)
 
-    create_model(filepath['directory_path'], filepath['dataset_path'], df)
+    # Create the SVM Model
+    create_model(filepath['directory_path'], df)
 
     
     
