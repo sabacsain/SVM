@@ -35,8 +35,16 @@ def load_model(filepath) -> object:
 def test_model(loaded_model) -> int:
     try:
         # Change test_input as necessary
-        test_input = [2.9543,1.076,0.64577,0.89394] 
+        test_input = [3.6077,6.8576,-1.1622,0.28231] 
         predicted_label = loaded_model.predict([test_input])
+
+        # Genuine
+        # 3.6077,6.8576,-1.1622,0.28231
+        # 3.7022,6.9942,-1.8511,-0.12889
+
+        # Fake
+        # 0.52374,3.644,-4.0746,-1.9909
+        # -4.2887,-7.8633,11.8387,-1.8978
     
     except Exception as e:
         print('An error occured: ', e)

@@ -10,12 +10,14 @@ from sklearn.model_selection import train_test_split
 cancer = load_breast_cancer() 
 
 # Feature columns
-df_feat = pd.DataFrame(cancer['data'], 
-                       columns = cancer['feature_names']) 
+df_feat = pd.DataFrame(cancer['data'], columns = cancer['feature_names']) 
   
 # Label column
-df_target = pd.DataFrame(cancer['target'],  
-                     columns =['Cancer']) 
+df_target = pd.DataFrame(cancer['target'],  columns =['Cancer']) 
+
+# print("Dataframe looks like : ") 
+# print(df_feat.head()) 
+# exit(0)
                        
 # Data splitting
 X_train, X_test, y_train, y_test = train_test_split(df_feat, 
@@ -23,15 +25,15 @@ X_train, X_test, y_train, y_test = train_test_split(df_feat,
                                                         test_size = 0.30, 
                                                         random_state = 101) 
 
-# Train the model
-model = SVC() 
-model.fit(X_train, y_train) 
+# # Train the model
+# model = SVC() 
+# model.fit(X_train, y_train) 
   
-# Display results
-predictions = model.predict(X_test) 
-print(classification_report(y_test, predictions)) 
+# # Display results
+# predictions = model.predict(X_test) 
+# print(classification_report(y_test, predictions)) 
 
-exit(0)
+# exit(0)
 
 
 #####################################################
